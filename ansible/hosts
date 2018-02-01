@@ -1,0 +1,6 @@
+[webapp]
+app1.org
+app2.org
+
+[balancer]
+haproxy.org
