@@ -1,0 +1,21 @@
+- hosts: webapp
+  serial: 1
+
+  pre_tasks:
+    - name: disable any monitoring that we have for this node as we are going to update it
+      # insert command here to disable the set monitoring system
+
+
+    - name: take server out of rotation from haproxy
+      shell: echo "disable server {{ inventory_hostname }}" | socat stdio /var/lib/haproxy/stats
+      delegate_to: "{{ item }}"
+      with_items: "haproxy.org"
+ 
+  post_tasks:
+    - name: Put the server back in rotation 
+      shell: echo "enable server {{ inventory_hostname }}" | socat stdio /var/lib/haproxy/stats
+      delegate_to: "{{ item }}"
+      with_items: "haproxy.org"
+    
+    - name: Put the node back in monitoring 
+    # insert command here to enable the set monitoring system

@@ -1,8 +1,19 @@
 - hosts: webapp
+
+  vars:
+    git_repo: <repo url where app is hosted>
+    webapp_dir: <directory where app is hosted>
   tasks:
+    # the app mya also need other software pacjkages installed hence we can add them here eg the git module below
     - name: install git 
       apt: pkg=git state=installed
     
     - name: deploy the app 
-      git: repo=<apps repo> dest=/var/www/
+      git: repo={{git_repo}} dest={{webapp_dir}} version=master      
       tags: deploy
+      notify:
+        - restart webapp
+      
+  handlers:
+    - name: restart webapp
+      #<use specific module used to launch/manage app eg supevisord>
